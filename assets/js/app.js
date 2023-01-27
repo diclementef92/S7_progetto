@@ -41,40 +41,10 @@ const loadSongsByArtist = function (songs, section) {
     songs_div.appendChild(card);
   });
 };
-//   });
-//   switch (section) {
-//     case ".songs-section1":
-//       break;
-
-//     case ".songs-section2":
-//       let card = document.createElement("div");
-//       card.classList.add("card");
-
-//       card.innerHTML = `
-//       <img src="${songs[0].album.cover_medium}" class="card-img-top" alt="album-cover">
-//       <div class="card-body">
-//         <h5 class="card-title">${songs[0].title}</h5>
-//         <p class="card-text">${songs[0].artist.name}</p>
-//         <a href="#" class="btn btn-primary">Play</a>
-//       </div>
-//     `;
-//       songs_div.appendChild(card);
-
-//       break;
-//     case ".songs-section3":
-//       let card2 = document.createElement("div");
-//       card2.innerHTML = createCarousel
-
-//       songs_div.appendChild(card2);
-
-//       break;
-
-//     default:
-//       break;
 
 const loadSong = function (song, section) {
-  const songs_div = document.querySelector(section);
-  songs_div.innerHTML = "";
+  const song_div = document.querySelector(section);
+  song_div.innerHTML = "";
   let card = document.createElement("div");
   card.classList.add("card");
 
@@ -86,16 +56,27 @@ const loadSong = function (song, section) {
         <a href="#" class="btn btn-primary">Play</a>
       </div>
     `;
-  songs_div.appendChild(card);
-};
-const loadAlbum = function (section, ...albums) {
-  const songs_div = document.querySelector(section);
-  let card = document.createElement("div");
-  card.innerHTML = createCarousel();
-  songs_div.appendChild(card);
+  song_div.appendChild(card);
 };
 
-const createCarousel = function () {};
+const createCarousel = function (albums, section) {
+  console.log(albums);
+  const albums_div = document.querySelector(section + " .carousel-inner");
+  albums.forEach((album) => {
+    albums_div.innerHTML += `<div class="carousel-item">
+    <img src="${album.album.cover_medium}" class="d-block w-100" alt="...">
+    <div class="carousel-caption d-none d-md-block">
+        <h5>${album.album.title}</h5>
+        <p>${album.artist.name}</p>
+    </div>
+</div> `;
+  });
+
+  const first_item_active = document.querySelector(
+    ".carousel-item:first-of-type"
+  );
+  first_item_active.classList.add("active");
+};
 
 window.onload = () => {
   let preferredArtist = document.querySelector("#preferred-artist");
@@ -112,5 +93,16 @@ window.onload = () => {
     loadSong(data.data[0], ".songs-section2")
   );
 
-  const creaCarosolleconAlbiums = async function (params) {};
+  async function retriveAlbums(preferredAlbums) {
+    let result = [];
+    for (let i = 0; i < preferredAlbums.length; i++) {
+      await getData(preferredAlbums[i]).then((data) =>
+        result.push(data.data[0])
+      );
+    }
+    return result;
+  }
+  retriveAlbums(preferredAlbums).then((albums) =>
+    createCarousel(albums, ".songs-section3")
+  );
 };
