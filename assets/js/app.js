@@ -34,7 +34,7 @@ const loadSongsByArtist = function (songs, section) {
         <div class="card-body">
           <h5 class="card-title">${song.title_short}</h5>
           <p class="card-text">${song.artist.name}</p>
-          <a href="#" class="btn btn-primary">Play</a>
+          <a href="${song.link}" class="btn btn-primary">Play</a>
           </div>
       </div>
     </div>`;
@@ -53,7 +53,7 @@ const loadSong = function (song, section) {
       <div class="card-body">
         <h5 class="card-title">${song.title}</h5>
         <p class="card-text">${song.artist.name}</p>
-        <a href="#" class="btn btn-primary">Play</a>
+        <a href="${song.link}" class="btn btn-primary"  >Play</a>
       </div>
     `;
   song_div.appendChild(card);
